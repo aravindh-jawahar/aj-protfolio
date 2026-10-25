@@ -32,6 +32,13 @@ html.js .career-list { display: none; }
 button.span:hover .bar, button.span[aria-expanded='true'] .bar { filter: brightness(1.15); outline: 2px solid var(--c); outline-offset: 1px; }
 .span__label { display: block; padding-left: calc(var(--offset) * 1%); font-size: var(--step--1); font-weight: 500; }
 .span.flip .span__label { padding-left: 0; padding-right: calc((100 - var(--offset) - var(--size)) * 1%); text-align: right; }
+.span[data-depth='2'] .span__label::before { content: '↳ ' / ''; color: var(--ink-muted); }
+
+/* Highlight the active span's bar so it can be matched to its label, mainly on phones. */
+.bar { transition: opacity 150ms ease; }
+.trace__rows:has(button.span:is(:hover, :focus, [aria-expanded='true'])) .bar { opacity: 0.3; }
+.trace__rows button.span:is(:hover, :focus, [aria-expanded='true']) .bar { opacity: 1; }
+
 .span__range { color: var(--ink-muted); font-size: 0.75rem; font-weight: 400; white-space: nowrap; }
 .span--root .span__label { color: var(--ink-muted); }
 
@@ -63,6 +70,7 @@ button.span:hover .bar, button.span[aria-expanded='true'] .bar { filter: brightn
 .span-detail h3 { font-size: var(--step-0); margin-top: var(--space-2); }
 .span-detail ul { padding-left: 1.1rem; max-width: var(--measure); }
 .span-detail__range { color: var(--ink-muted); }
+.span-detail__label { font-weight: 700; }
 .span-detail__stack { color: var(--ink-muted); font-size: var(--step--1); }
 
 .panel-enter-active, .panel-leave-active { transition: opacity 200ms ease, transform 200ms ease; }

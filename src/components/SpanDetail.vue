@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { Span } from '../data/types';
 
-defineProps<{ span: Span; range: string }>();
+defineProps<{ span: Span; range: string; showLabel?: boolean }>();
 </script>
 
 <template>
   <div :id="`detail-${span.id}`" class="span-detail" :data-stack="span.stackColour">
+    <p v-if="showLabel" class="span-detail__label">{{ span.label }}</p>
     <p class="span-detail__range mono">{{ range }}</p>
     <p v-if="span.summary">{{ span.summary }}</p>
     <p v-if="span.stack" class="span-detail__stack">{{ span.stack.join(', ') }}</p>

@@ -29,11 +29,14 @@ onMounted(() => {
 });
 onBeforeUnmount(() => query?.removeEventListener('change', syncNarrow));
 const list = ref<HTMLElement | null>(null);
+const narrowPanel = ref<{ $el: HTMLElement } | null>(null);
 
 const buttons = () => Array.from(list.value?.querySelectorAll<HTMLButtonElement>('button.span') ?? []);
 
 function toggle(id: string) {
   openId.value = openId.value === id ? null : id;
+  // On phones the panel sits under the whole chart, often off-screen.
+  if (narrow.value && openId.value) nextTick(() => narrowPanel.value?.$el.scrollIntoView({ block: 'nearest' }));
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -85,6 +88,7 @@ function onKeydown(event: KeyboardEvent) {
               type="button"
               class="span"
               :class="{ flip: row.flip }"
+              :data-depth="row.depth"
               :aria-expanded="openId === row.span.id"
               :aria-controls="openId === row.span.id ? `detail-${row.span.id}` : undefined"
               @click="toggle(row.span.id)"
@@ -100,7 +104,14 @@ function onKeydown(event: KeyboardEvent) {
       </ol>
     </div>
     <Transition name="panel">
-      <SpanDetail v-if="narrow && openRow" :key="openRow.span.id" :span="openRow.span" :range="openRow.range" />
+      <SpanDetail
+        v-if="narrow && openRow"
+        ref="narrowPanel"
+        :key="openRow.span.id"
+        :span="openRow.span"
+        :range="openRow.range"
+        show-label
+      />
     </Transition>
   </section>
 </template>
