@@ -1,0 +1,51 @@
+---
+import { site } from '../data/site';
+---
+
+<header class="site-header container">
+  <a class="site-header__name" href="/">{site.name}</a>
+  <nav aria-label="Sections">
+    <a href="/#work">Work</a>
+    <a href="/#stack">Stack</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+    <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
+      <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+      <path d="M10 2a8 8 0 0 1 0 16z" fill="currentColor"></path>
+    </svg>
+  </button>
+</header>
+
+<script is:inline>
+  document.querySelector('.theme-toggle').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+      ? root.dataset.theme === 'dark'
+      : matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = isDark ? 'light' : 'dark';
+    root.dataset.theme = theme;
+    try { localStorage.setItem('theme', theme); } catch {}
+  });
+</script>
+
+<style>
+  .site-header {
+    display: flex; align-items: center; gap: var(--space-3);
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--grid);
+  }
+  .site-header__name { font-weight: 700; text-decoration: none; margin-right: auto; }
+  nav { display: flex; gap: var(--space-3); }
+  nav a { text-decoration: none; color: var(--ink-muted); }
+  nav a:hover { color: var(--ink); text-decoration: underline; }
+  .theme-toggle {
+    display: grid; place-items: center; width: 2.5rem; height: 2.5rem;
+    background: none; border: 1px solid var(--grid);
+  }
+  .theme-toggle:hover { border-color: var(--ink-muted); }
+  @media (max-width: 479px) {
+    .site-header__name { display: none; }
+    nav { margin-right: auto; }
+  }
+</style>

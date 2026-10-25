@@ -1,0 +1,25 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import candid from '../assets/images/candid.jpg';
+---
+
+<Base title="Page not found — Aravindh Jawahar" noindex>
+  <main class="container not-found">
+    <div>
+      <h1>This span doesn't exist</h1>
+      <p>The page you asked for isn't here. The rest of the trace is.</p>
+      <p><a href="/">Back to home</a></p>
+    </div>
+    <Picture src={candid} alt="Aravindh on a beach" width={480} formats={['avif', 'webp']} />
+  </main>
+</Base>
+
+<style>
+  .not-found { display: grid; grid-template-columns: 1fr 22rem; gap: var(--space-4); padding-block: var(--space-6); align-items: center; }
+  h1 { font-size: var(--step-3); margin-bottom: var(--space-2); }
+  p + p { margin-top: var(--space-2); }
+  @media (max-width: 719px) {
+    .not-found { grid-template-columns: 1fr; padding-block: var(--space-4); }
+  }
+</style>
