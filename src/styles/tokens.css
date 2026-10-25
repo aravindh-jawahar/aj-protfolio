@@ -1,0 +1,56 @@
+:root {
+  --surface: #EEF1F4;
+  --ink: #1C2433;
+  --ink-muted: #5A6475;
+  --grid: #D5DBE3;
+  --span-ruby: #B3263E;
+  --span-node: #2F5DA8;
+  --span-python: #B07A0C;
+
+  --font-sans: 'Schibsted Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.563rem;
+  --step-3: 2.441rem;
+  --step-4: 3.815rem;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6rem;
+
+  --max-width: 1120px;
+  --gutter: 1.25rem;
+  --measure: 70ch;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #161B26;
+    --ink: #E4E8EF;
+    --ink-muted: #9AA4B5;
+    --grid: #2A3242;
+    --span-ruby: #E0566C;
+    --span-node: #6C97E0;
+    --span-python: #E0AE45;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface: #161B26;
+  --ink: #E4E8EF;
+  --ink-muted: #9AA4B5;
+  --grid: #2A3242;
+  --span-ruby: #E0566C;
+  --span-node: #6C97E0;
+  --span-python: #E0AE45;
+  color-scheme: dark;
+}
