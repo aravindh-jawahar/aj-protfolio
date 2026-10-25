@@ -1,9 +1,31 @@
 ---
 import Base from '../layouts/Base.astro';
+import TraceWaterfall from '../components/TraceWaterfall.vue';
+import CareerList from '../components/CareerList.astro';
+import { career } from '../data/career';
+import { site } from '../data/site';
+import { toYearMonth } from '../lib/timeline';
+import '../styles/trace.css';
+
+const now = toYearMonth(new Date());
 ---
 
 <Base>
   <main class="container">
-    <h1>Aravindh Jawahar</h1>
+    <section id="work" class="hero">
+      <h1>{site.name}</h1>
+      <p class="hero__lead">{site.title.charAt(0).toUpperCase() + site.title.slice(1)}. {site.oneLiner}</p>
+      <TraceWaterfall spans={career} now={now} client:visible />
+      <CareerList spans={career} now={now} />
+    </section>
   </main>
 </Base>
+
+<style>
+  .hero { padding-block: var(--space-5) var(--space-6); }
+  h1 { font-size: var(--step-4); letter-spacing: -0.02em; }
+  .hero__lead { font-size: var(--step-1); margin: var(--space-2) 0 var(--space-5); color: var(--ink-muted); }
+  @media (max-width: 719px) {
+    h1 { font-size: var(--step-3); }
+  }
+</style>
