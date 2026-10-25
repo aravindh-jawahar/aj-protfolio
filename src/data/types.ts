@@ -1,26 +1,35 @@
-export type StackColour = 'ruby' | 'node' | 'python' | 'neutral';
+export type StackColour = 'ruby' | 'node' | 'python';
 
 export interface DetailGroup {
   heading?: string;
   points: string[];
 }
 
-export interface Span {
+export interface Role {
   id: string;
-  label: string;
-  parentId: string | null;
+  company: string;
+  location: string;
+  role: string;
+  badge: string;
+  colour: StackColour;
   /** 'YYYY-MM' */
   start: string;
-  /** 'YYYY-MM', inclusive; null = present */
+  /** 'YYYY-MM'; null = present */
   end: string | null;
-  stackColour: StackColour;
-  yearsOnly?: boolean;
-  stack?: string[];
   summary?: string;
+  stack: string[];
   details: DetailGroup[];
+}
+
+export interface Degree {
+  degree: string;
+  school: string;
+  start: string;
+  end: string;
 }
 
 export interface StackGroup {
   name: string;
   items: string[];
+  featured?: boolean;
 }

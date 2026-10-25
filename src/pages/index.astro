@@ -1,17 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
+import AiEngineering from '../components/AiEngineering.astro';
 import Services from '../components/Services.astro';
-import TraceWaterfall from '../components/TraceWaterfall.vue';
-import CareerList from '../components/CareerList.astro';
+import Experience from '../components/Experience.astro';
+import Education from '../components/Education.astro';
 import Stack from '../components/Stack.astro';
 import Contact from '../components/Contact.astro';
-import { career } from '../data/career';
 import { impact, strip } from '../data/site';
-import { toYearMonth } from '../lib/timeline';
-import '../styles/trace.css';
-
-const now = toYearMonth(new Date());
 ---
 
 <Base>
@@ -38,16 +34,10 @@ const now = toYearMonth(new Date());
       </dl>
     </section>
 
+    <AiEngineering />
     <Services />
-
-    <section id="work" class="section container" aria-labelledby="work-title">
-      <h2 id="work-title" class="section__title">Career, as a trace</h2>
-      <p class="section__lead">Each bar is a real span of time. Select one to open its details.</p>
-      <div class="card work-card">
-        <TraceWaterfall spans={career} now={now} client:visible />
-        <CareerList spans={career} now={now} />
-      </div>
-    </section>
+    <Experience />
+    <Education />
 
     <Stack />
     <Contact />
@@ -73,13 +63,11 @@ const now = toYearMonth(new Date());
   .impact dt { font-size: clamp(2.441rem, 5vw, 3.815rem); font-weight: 800; line-height: 1; }
   .impact dd { margin: var(--space-1) 0 0; color: var(--ink-muted); font-size: var(--step--1); }
 
-  .work-card { margin-top: var(--space-4); padding: var(--space-4); }
 
   .footer { padding-block: var(--space-5) var(--space-4); color: var(--ink-muted); font-size: var(--step--1); }
 
   @media (max-width: 799px) {
     .impact { grid-template-columns: 1fr; }
-    .work-card { padding: var(--space-3) var(--space-2); }
   }
   @media (max-width: 719px) {
     .strip ul { justify-content: flex-start; font-size: var(--step-0); }

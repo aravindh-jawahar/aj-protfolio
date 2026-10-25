@@ -18,33 +18,19 @@ Primary job of the site: in under 30 seconds, show that he ships AI features and
 systems around them (Rails, Nuxt/Vue, React, Node/TypeScript, Python) at real scale, and make it
 one click to contact him or open his resume.
 
-## 2. The concept: "Career as a distributed trace"
+## 2. Page concept
 
-Aravindh's daily work is production engineering: requests flowing through Cloudflare → Nuxt SSR →
-Rails API → Sidekiq/Kafka → PostgreSQL. So the site borrows the visual language of a
-**distributed-tracing waterfall** (the span view in an observability tool) — but uses it to tell
-his career story.
+A dark landing page that leads with AI engineering (2026-10-25 redesign; the earlier career "trace
+waterfall" was retired at Aravindh's request).
 
-- **The career section is a trace waterfall.** The root span is "career" (2014 → now).
-  Child spans are jobs and education, laid out on a real time axis. Span width = real duration.
-- **Nesting only where the dates are real.** Artus Meggitt has two child spans (web platform and
-  desktop app, which ran side by side). Francium Tech and MoneySmart are ONE span — they share the
-  same dates, so a parent with one identical child would add nothing.
-- **Span colour encodes the primary stack of that work** (information, not decoration):
-  Rails/Ruby, Node/React/TS, Python. A small legend explains it. Education and the Meggitt
-  parent span are neutral (`--ink-muted`).
-- **Clicking a span** expands its detail panel (role, dates, stack, outcomes). This is the
-  main interaction and should feel like opening a span in a tracing tool. The Francium · MoneySmart
-  panel groups outcomes under short headings (section 5) — it is the richest panel.
-- The Francium · MoneySmart span stays visually "open" (still running) — a subtle live indicator.
-
-### Page structure (single page)
-
-See section 3 "Layout & shape" for the section order. The hero is a headline + bento of the
-portrait and resume stats; the career trace sits in its own card further down.
-
-On mobile (< 720px) the waterfall rotates to a **vertical** time axis (time flows down,
-spans become vertical bars with labels on the right). It must not become a sideways-scrolling mess.
+- **Hero:** headline, lead, resume + contact buttons, bento of portrait and resume stats.
+- **AI engineering:** the RAG pipeline as a 7-step diagram (sources → chunk & embed → pgvector →
+  hybrid router → Claude → guardrails → streamed answer) plus cards for agents & MCP, AI workflows
+  and AI-native development (`src/data/ai.ts`).
+- **Work experience:** a list of roles (badge · company + location · role + dates · Details). Each row
+  is a native `<details>` that expands in place with grouped outcomes — works without JavaScript.
+- **Education:** its own section with one card per degree; never mixed into experience.
+- **Stack:** card grid; the "AI engineering" group is a full-width featured card with pills.
 
 ## 3. Design system
 
@@ -69,35 +55,31 @@ bento cards). The earlier "quiet, light, no cards" rules are replaced by these.
 | `--span-python`  | `#E0AE45` | Python work                           |
 
 ### Type
-- **Manrope** (Google Fonts) — headings (700–800) and body. **Martian Mono** only for trace data
+- **Manrope** (Google Fonts) — headings (700–800) and body. **Martian Mono** only for dates
   (dates, axis ticks).
 - Type scale (rem): 0.875 / 1 / 1.25 / 1.563 / 2.441 / 3.815. Body 1rem, line-height 1.6.
 - Sentence case. "→" is allowed on buttons.
 
 ### Layout & shape
 - Max width 1120px. Rounded cards (14px radius, thin border, subtle gradient), pill nav,
-  green primary buttons, 2px radius on trace bars, 6px on the trace detail panel.
+  green primary buttons.
 - Sections in order: sticky header → hero (headline + bento of portrait and resume stats) →
-  stack strip → impact numbers → services cards → career trace (in a card) → stack cards →
+  stack strip → impact numbers → AI engineering → services → work experience → education → stack →
   contact card → footer.
 - Decorative 3D-ish shapes are CSS only (gradients/masks); no image or 3D libraries.
 
 ### Motion
-- Trace bars draw in on load (~900ms); card/button hover transitions only. Respect
-  `prefers-reduced-motion`.
+- Hover transitions and smooth in-page scrolling only. Respect `prefers-reduced-motion`.
 
 ### Quality floor
 - Lighthouse ≥ 95 on Performance, Accessibility, Best Practices, SEO.
-- Full keyboard support: spans are `<button>`s, arrow keys move between spans, Enter opens,
-  Esc closes. Visible focus ring.
-- The waterfall must have a text equivalent (an ordered list read by screen readers).
-- Works without JavaScript: spans render as static bars with details in `<details>` elements.
+- Full keyboard support with a visible focus ring; experience rows open with Enter/Space.
+- The whole site works without JavaScript (it ships none).
 
 ## 4. Tech stack (decided — do not change without asking)
 
 - **Astro 5** (static output) + **TypeScript** (strict).
-- Vue 3 island ONLY for the interactive trace waterfall (`client:visible`). Everything else is
-  plain Astro components with zero JS (no theme toggle — the site is dark only).
+- Plain Astro components, zero client JavaScript (no theme toggle — the site is dark only).
 - Plain CSS with custom properties (no Tailwind, no UI kit).
 - Content lives in `src/data/*.ts` typed objects — never hard-coded inside components.
 - No projects section: no personal projects and no GitHub repo list on the site.
@@ -111,11 +93,12 @@ bento cards). The earlier "quiet, light, no cards" rules are replaced by these.
 ### Folder structure
 ```
 src/
-  data/        site.ts, career.ts, stack.ts
-  components/  Header, Hero, Services, TraceWaterfall.vue, SpanDetail.vue, CareerList, Stack, Contact
+  data/        site.ts, experience.ts, education.ts, ai.ts, stack.ts, types.ts
+  components/  Header, Hero, AiEngineering, Services, Experience, Education, Stack, Contact
   layouts/     Base.astro
   pages/       index.astro, 404.astro
   styles/      tokens.css, global.css
+  lib/         dates.ts (formatRange)
   assets/images/  portrait.jpg (900×900 navy headshot), candid.jpg (1200×1500 beach photo)
 public/        CNAME, resume/Aravindh_Jawahar_Resume.pdf, favicon.svg, og.png
 ```
@@ -217,7 +200,7 @@ Stack: Node.js, Express, React, PostgreSQL, Docker, Jenkins, Airbrake
 - Before writing UI code in a phase, restate the design tokens you will use.
 - Take screenshots (Playwright) at 1440px and 390px widths after UI phases and critique them
   against this brief before declaring the phase done.
-- Never add a dependency not listed here without asking. Approved: `@astrojs/vue`,
+- Never add a dependency not listed here without asking. Approved:
   `@astrojs/sitemap`, Vitest, Playwright (screenshots and the one-off `og.png` — render a page,
   screenshot at 1200×630, commit the PNG; no build-time image pipeline), Lighthouse, axe.
 - Never invent numbers, clients or achievements. If content is missing, leave `TODO`.

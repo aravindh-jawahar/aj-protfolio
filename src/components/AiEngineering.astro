@@ -1,0 +1,81 @@
+---
+import { aiCards, pipeline } from '../data/ai';
+---
+
+<section id="ai" class="section container" aria-labelledby="ai-title">
+  <div class="ai__intro">
+    <h2 id="ai-title" class="section__title">AI engineering</h2>
+    <p class="section__lead">
+      The RAG assistant I built for a fintech comparison platform, from raw content to a grounded, streamed answer.
+    </p>
+  </div>
+
+  <div class="card pipeline-card">
+    <ol class="pipeline">
+      {
+        pipeline.map((step, i) => (
+          <li>
+            <span class="step">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <div class="ai-cards">
+    {
+      aiCards.map((card) => (
+        <article class="card ai-card">
+          <h3>{card.title}</h3>
+          <ul>
+            {card.points.map((point) => <li>{point}</li>)}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .ai__intro { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); align-items: end; margin-bottom: var(--space-4); }
+  .ai__intro .section__title { margin: 0; }
+
+  .pipeline-card { position: relative; overflow: hidden; padding: var(--space-4) var(--space-3); }
+  .pipeline-card::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(60% 90% at 50% 0%, var(--glow), transparent 70%);
+  }
+  .pipeline { position: relative; display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-2); list-style: none; padding: 0; }
+  /* The glowing rail that connects the steps. */
+  .pipeline::before {
+    content: ''; position: absolute; left: 1.1rem; right: 1.1rem; top: 1.1rem; height: 2px;
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 25%, transparent));
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .pipeline li { position: relative; }
+  .step {
+    position: relative; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--accent); box-shadow: 0 0 12px var(--glow);
+    font: 0.7rem var(--font-mono); color: var(--accent); margin-bottom: var(--space-2);
+  }
+  .pipeline h3 { font-size: var(--step-0); margin-bottom: 0.25rem; }
+  .pipeline p { font-size: 0.8rem; color: var(--ink-muted); }
+
+  .ai-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin-top: var(--space-2); }
+  .ai-card { padding: var(--space-3); }
+  .ai-card h3 { font-size: var(--step-1); margin-bottom: var(--space-2); color: var(--accent); }
+  .ai-card ul { padding-left: 1.1rem; color: var(--ink-muted); font-size: var(--step--1); display: grid; gap: var(--space-1); }
+
+  @media (max-width: 999px) {
+    .pipeline { grid-template-columns: 1fr; gap: var(--space-3); }
+    .pipeline::before { left: 1.1rem; right: auto; top: 1.1rem; bottom: 1.1rem; width: 2px; height: auto; }
+    .pipeline li { display: grid; grid-template-columns: 2.25rem 1fr; column-gap: var(--space-2); }
+    .step { grid-row: span 2; margin: 0; }
+    .ai-cards { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 719px) {
+    .ai__intro { grid-template-columns: 1fr; }
+  }
+</style>

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('header nav links to every section', async ({ page }) => {
   await page.goto('/');
-  for (const [name, id] of [['Work', 'work'], ['Stack', 'stack'], ['Contact', 'contact']]) {
+  for (const [name, id] of [['AI', 'ai'], ['Experience', 'experience'], ['Education', 'education'], ['Stack', 'stack'], ['Contact', 'contact']]) {
     await expect(page.getByRole('navigation').getByRole('link', { name, exact: true })).toHaveAttribute("href", `/#${id}`);
     await expect(page.locator(`#${id}`)).toHaveCount(1);
   }
