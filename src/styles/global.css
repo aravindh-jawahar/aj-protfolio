@@ -61,3 +61,10 @@ a:hover { text-decoration-thickness: 2px; }
 .btn--ghost { color: var(--ink); border-color: var(--border); }
 .btn--ghost:hover { border-color: var(--ink-muted); }
 .btn--small { padding: 0.5rem 0.875rem; font-size: var(--step--1); }
+
+html { scroll-behavior: smooth; }
+/* Keeps section tops clear of the sticky header when jumped to. */
+section[id] { scroll-margin-top: 5rem; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

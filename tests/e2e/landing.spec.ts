@@ -26,3 +26,13 @@ test('site is dark only, with no theme toggle', async ({ page }) => {
   const [r, g, b] = bg.match(/\d+/g)!.map(Number);
   expect(r + g + b).toBeLessThan(60);
 });
+
+test('get in touch scrolls smoothly to contact, clear of the sticky header', async ({ page }) => {
+  await page.goto('/');
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('smooth');
+  await page.locator('#top').getByRole('link', { name: /Get in touch/ }).click();
+  const contact = page.locator('#contact');
+  await expect(contact).toBeInViewport();
+  const headerBottom = await page.locator('.site-header').evaluate((el) => el.getBoundingClientRect().bottom);
+  await expect.poll(() => contact.evaluate((el) => el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(headerBottom - 1);
+});
