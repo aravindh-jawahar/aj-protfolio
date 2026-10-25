@@ -17,6 +17,7 @@ const now = toYearMonth(new Date());
     <section id="work" class="hero">
       <h1>{site.name}</h1>
       <p class="hero__lead">{site.title.charAt(0).toUpperCase() + site.title.slice(1)}. {site.oneLiner}</p>
+      <h2 class="visually-hidden">Career</h2>
       <TraceWaterfall spans={career} now={now} client:visible />
       <CareerList spans={career} now={now} />
     </section>
