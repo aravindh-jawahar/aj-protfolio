@@ -23,9 +23,9 @@ one click to contact him or open his resume.
 Aravindh's daily work is production engineering: requests flowing through Cloudflare → Nuxt SSR →
 Rails API → Sidekiq/Kafka → PostgreSQL. So the site borrows the visual language of a
 **distributed-tracing waterfall** (the span view in an observability tool) — but uses it to tell
-his career story. This is the one bold idea. Everything else stays quiet.
+his career story.
 
-- **Hero = a trace waterfall of his career.** The root span is "career" (2014 → now).
+- **The career section is a trace waterfall.** The root span is "career" (2014 → now).
   Child spans are jobs and education, laid out on a real time axis. Span width = real duration.
 - **Nesting only where the dates are real.** Artus Meggitt has two child spans (web platform and
   desktop app, which ran side by side). Francium Tech and MoneySmart are ONE span — they share the
@@ -40,67 +40,51 @@ his career story. This is the one bold idea. Everything else stays quiet.
 
 ### Page structure (single page)
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│ Aravindh Jawahar                         Work  Stack  Contact │
-│ AI product engineer. <one-liner from section 5>               │
-│                                                               │
-│ 2014 ...... 2018   2019 ... 2021      2022 .............. now │
-│ ├ career ───────────────────────────────────────────────────▶ │
-│ ├ B.E. Anna Univ ┤                                            │
-│                  ├CADS┤                                       │
-│                         ├ M.S. ESAIP ─┤                       │
-│                                       ├Meggitt┤               │
-│                                       ├web────┤               │
-│                                       ├desktop┤               │
-│                                          ├ Francium · MoneySmart ──▶ │
-│ [ span detail panel opens here on click ]                     │
-├──────────────────────────────────────────────────────────────┤
-│ Stack — grouped, plain text, no logo wall                     │
-├──────────────────────────────────────────────────────────────┤
-│ Contact — portrait, email, LinkedIn, GitHub, resume PDF       │
-└──────────────────────────────────────────────────────────────┘
-```
+See section 3 "Layout & shape" for the section order. The hero is a headline + bento of the
+portrait and resume stats; the career trace sits in its own card further down.
 
 On mobile (< 720px) the waterfall rotates to a **vertical** time axis (time flows down,
 spans become vertical bars with labels on the right). It must not become a sideways-scrolling mess.
 
 ## 3. Design system
 
-### Colour (light is default; dark mode via prefers-color-scheme + a toggle)
+Redesigned on 2026-10-25 after Aravindh shared a dark landing-page reference (near-black, green accent,
+bento cards). The earlier "quiet, light, no cards" rules are replaced by these.
 
-| Token            | Light     | Dark      | Use                                   |
-|------------------|-----------|-----------|---------------------------------------|
-| `--surface`      | `#EEF1F4` | `#161B26` | page background (cool, not cream)     |
-| `--ink`          | `#1C2433` | `#E4E8EF` | primary text                          |
-| `--ink-muted`    | `#5A6475` | `#9AA4B5` | secondary text, axis ticks, neutral spans |
-| `--grid`         | `#D5DBE3` | `#2A3242` | time-axis gridlines, dividers         |
-| `--span-ruby`    | `#B3263E` | `#E0566C` | Rails / Ruby work                     |
-| `--span-node`    | `#2F5DA8` | `#6C97E0` | React / Node / TypeScript work        |
-| `--span-python`  | `#B07A0C` | `#E0AE45` | Python work                           |
+### Colour (dark only — no light mode, no theme toggle)
 
-Do NOT use: cream/beige backgrounds, terracotta accents, near-black + neon green,
-gradient washes, glassmorphism, or a grey drop shadow under every card.
+| Token            | Value     | Use                                   |
+|------------------|-----------|---------------------------------------|
+| `--bg`           | `#060907` | page background                       |
+| `--surface`      | `#0C110E` | cards, strip                          |
+| `--surface-2`    | `#121914` | card gradient top, hover              |
+| `--border`       | `#1D2820` | card borders, dividers, gridlines     |
+| `--ink`          | `#EEF3EF` | primary text                          |
+| `--ink-muted`    | `#9AA79E` | secondary text, axis ticks, neutral spans |
+| `--accent`       | `#5CBF62` | buttons, big numbers, icons           |
+| `--accent-ink`   | `#04150A` | text on accent buttons                |
+| `--glow`         | `rgba(76,175,80,.18)` | radial glows behind hero/contact |
+| `--span-ruby`    | `#E0566C` | Rails / Ruby work                     |
+| `--span-node`    | `#6C97E0` | React / Node / TypeScript work        |
+| `--span-python`  | `#E0AE45` | Python work                           |
 
 ### Type
-- **Schibsted Grotesk** (Google Fonts) — headings and body. One family, varied weight/size.
-- **Martian Mono** — ONLY for real trace data: timestamps, durations, axis ticks. Never for
-  decorative labels.
+- **Manrope** (Google Fonts) — headings (700–800) and body. **Martian Mono** only for trace data
+  (dates, axis ticks).
 - Type scale (rem): 0.875 / 1 / 1.25 / 1.563 / 2.441 / 3.815. Body 1rem, line-height 1.6.
-  Max line length 70ch.
-- No ALL-CAPS eyebrow labels. No single highlighted word in headlines. Sentence case everywhere.
-  No "→" appended to buttons. No "A · B · C" meta strings.
+- Sentence case. "→" is allowed on buttons.
 
 ### Layout & shape
-- Left-aligned content, 12-column grid, max width 1120px.
-- Border radius: 2px on spans only (they are bars), 6px on the detail panel, 0 elsewhere.
-  Do not chop the page into identical rounded cards.
+- Max width 1120px. Rounded cards (14px radius, thin border, subtle gradient), pill nav,
+  green primary buttons, 2px radius on trace bars, 6px on the trace detail panel.
+- Sections in order: sticky header → hero (headline + bento of portrait and resume stats) →
+  stack strip → impact numbers → services cards → career trace (in a card) → stack cards →
+  contact card → footer.
+- Decorative 3D-ish shapes are CSS only (gradients/masks); no image or 3D libraries.
 
 ### Motion
-- ONE orchestrated moment: on first load, spans draw left-to-right along the time axis
-  (~900ms total, staggered by start date). Nothing else animates on load.
-- Interaction motion only: span detail panel expands/collapses (~200ms).
-- Respect `prefers-reduced-motion` (no draw-in, panels just appear).
+- Trace bars draw in on load (~900ms); card/button hover transitions only. Respect
+  `prefers-reduced-motion`.
 
 ### Quality floor
 - Lighthouse ≥ 95 on Performance, Accessibility, Best Practices, SEO.
@@ -113,7 +97,7 @@ gradient washes, glassmorphism, or a grey drop shadow under every card.
 
 - **Astro 5** (static output) + **TypeScript** (strict).
 - Vue 3 island ONLY for the interactive trace waterfall (`client:visible`). Everything else is
-  plain Astro components with zero JS.
+  plain Astro components with zero JS (no theme toggle — the site is dark only).
 - Plain CSS with custom properties (no Tailwind, no UI kit).
 - Content lives in `src/data/*.ts` typed objects — never hard-coded inside components.
 - No projects section: no personal projects and no GitHub repo list on the site.
@@ -128,7 +112,7 @@ gradient washes, glassmorphism, or a grey drop shadow under every card.
 ```
 src/
   data/        site.ts, career.ts, stack.ts
-  components/  TraceWaterfall.vue, SpanDetail.vue, Stack.astro, Contact.astro
+  components/  Header, Hero, Services, TraceWaterfall.vue, SpanDetail.vue, CareerList, Stack, Contact
   layouts/     Base.astro
   pages/       index.astro, 404.astro
   styles/      tokens.css, global.css
@@ -137,7 +121,7 @@ public/        CNAME, resume/Aravindh_Jawahar_Resume.pdf, favicon.svg, og.png
 ```
 
 ### Photos
-- `portrait.jpg` — Contact section, shown at ~300–400px wide. Already cropped and sized; do not
+- `portrait.jpg` — hero bento card. Already cropped and sized; do not
   upscale.
 - `candid.jpg` — the 404 page, next to a short line pointing back home.
 

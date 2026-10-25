@@ -1,36 +1,35 @@
 ---
-import { Picture } from 'astro:assets';
-import portrait from '../assets/images/portrait.jpg';
 import { site } from '../data/site';
 ---
 
-<section id="contact" class="section contact" aria-labelledby="contact-title">
-  <Picture
-    src={portrait}
-    alt="Aravindh Jawahar"
-    width={360}
-    formats={['avif', 'webp']}
-    class="contact__photo"
-    loading="lazy"
-  />
-  <div>
-    <h2 id="contact-title">Contact</h2>
-    <p>Based in {site.location}. The quickest way to reach me is email.</p>
-    <ul>
-      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-      <li><a href={site.linkedin}>LinkedIn</a></li>
-      <li><a href={site.github}>GitHub</a></li>
-      <li><a href={site.resumePath} download>Download resume (PDF)</a></li>
-    </ul>
+<section id="contact" class="section container" aria-labelledby="contact-title">
+  <div class="card contact">
+    <div>
+      <h2 id="contact-title" class="section__title">Let's build something that ships</h2>
+      <p class="section__lead">Based in {site.location}. Email is the quickest way to reach me.</p>
+    </div>
+    <div class="contact__actions">
+      <a class="btn btn--primary" href={`mailto:${site.email}`}>{site.email} <span aria-hidden="true">→</span></a>
+      <a class="btn btn--ghost" href={site.resumePath} download>Download resume (PDF)</a>
+      <a class="btn btn--ghost" href={site.linkedin}>LinkedIn</a>
+      <a class="btn btn--ghost" href={site.github}>GitHub</a>
+    </div>
   </div>
 </section>
 
 <style>
-  .contact { display: grid; grid-template-columns: 18rem 1fr; gap: var(--space-4); align-items: start; }
-  .contact :global(.contact__photo) { width: 100%; height: auto; }
-  ul { list-style: none; padding: 0; margin-top: var(--space-3); display: grid; gap: var(--space-1); font-size: var(--step-1); }
-  @media (max-width: 719px) {
-    .contact { grid-template-columns: 1fr; }
-    .contact :global(.contact__photo) { max-width: 14rem; }
+  .contact {
+    position: relative; overflow: hidden;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-4); align-items: center;
+    padding: var(--space-5) var(--space-4);
+  }
+  .contact::before {
+    content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(50% 80% at 100% 100%, var(--glow), transparent 70%);
+  }
+  .contact > * { position: relative; }
+  .contact__actions { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+  @media (max-width: 799px) {
+    .contact { grid-template-columns: 1fr; padding: var(--space-4) var(--space-3); }
   }
 </style>

@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-for (const scheme of ['light', 'dark'] as const) {
+for (const scheme of ['dark'] as const) {
   for (const width of [1440, 390]) {
     test(`home has no axe violations (${scheme}, ${width}px)`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });

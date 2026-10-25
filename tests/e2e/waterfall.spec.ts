@@ -3,8 +3,15 @@ import { expect, test } from '@playwright/test';
 const span = (page: import('@playwright/test').Page, name: RegExp) =>
   page.locator('.trace').getByRole('button', { name });
 
-test('keyboard opens, moves between and closes spans', async ({ page }) => {
+// The island hydrates on client:visible; Astro drops the `ssr` attribute once it has.
+async function openTrace(page: import('@playwright/test').Page) {
   await page.goto('/');
+  await page.locator('#work').scrollIntoViewIfNeeded();
+  await page.waitForSelector('astro-island:not([ssr])', { state: 'attached' });
+}
+
+test('keyboard opens, moves between and closes spans', async ({ page }) => {
+  await openTrace(page);
   const be = span(page, /Anna University/);
   const cads = span(page, /CADS Software/);
   await be.focus();
@@ -25,7 +32,7 @@ test('keyboard opens, moves between and closes spans', async ({ page }) => {
 });
 
 test('moneysmart panel shows outcomes without partner names', async ({ page }) => {
-  await page.goto('/');
+  await openTrace(page);
   await span(page, /Francium Tech · MoneySmart/).click();
   const panel = page.locator('.trace .span-detail');
   await expect(panel).toContainText('100K+ daily users');
@@ -34,7 +41,7 @@ test('moneysmart panel shows outcomes without partner names', async ({ page }) =
 
 test('mobile has no horizontal scroll', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await openTrace(page);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   for (const button of await page.locator('.trace button.span').all()) {
     await expect(button).toBeVisible();
@@ -44,7 +51,7 @@ test('mobile has no horizontal scroll', async ({ page }) => {
 
 test('phone: focusing a span highlights its own bar and dims the rest', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await openTrace(page);
   await span(page, /Anna University/).focus();
   const opacity = (id: string) =>
     page.locator(`#span-${id} .bar`).evaluate((el) => Number(getComputedStyle(el).opacity));
@@ -54,7 +61,7 @@ test('phone: focusing a span highlights its own bar and dims the rest', async ({
 
 test('phone: opening a span scrolls its labelled panel into view', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await openTrace(page);
   await span(page, /Anna University/).click();
   const panel = page.locator('.trace .span-detail');
   await expect(panel).toContainText('Anna University');
@@ -62,7 +69,7 @@ test('phone: opening a span scrolls its labelled panel into view', async ({ page
 });
 
 test('desktop: child spans are marked as nested', async ({ page }) => {
-  await page.goto('/');
+  await openTrace(page);
   const marker = (id: string) =>
     page.locator(`#span-${id} .span__label`).evaluate((el) => getComputedStyle(el, '::before').content);
   expect(await marker('meggitt-web')).toContain('↳');

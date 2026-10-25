@@ -3,7 +3,7 @@
 html { -webkit-text-size-adjust: 100%; }
 body {
   min-height: 100vh;
-  background: var(--surface);
+  background: var(--bg);
   color: var(--ink);
   font: 400 var(--step-0)/1.6 var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -11,12 +11,12 @@ body {
 img, picture, svg { display: block; max-width: 100%; height: auto; }
 button, input { font: inherit; color: inherit; }
 button { cursor: pointer; }
-h1, h2, h3 { line-height: 1.15; font-weight: 700; text-wrap: balance; }
+h1, h2, h3 { line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
 p { max-width: var(--measure); }
 a { color: inherit; text-underline-offset: 0.2em; }
 a:hover { text-decoration-thickness: 2px; }
 
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .visually-hidden {
   position: absolute !important;
@@ -38,3 +38,26 @@ a:hover { text-decoration-thickness: 2px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+.section { padding-block: var(--space-6) 0; }
+.section__title { font-size: var(--step-3); margin-bottom: var(--space-3); }
+.section__lead { color: var(--ink-muted); }
+.accent { color: var(--accent); }
+
+.card {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.75rem 1.25rem; border-radius: 10px;
+  font-weight: 600; text-decoration: none; border: 1px solid transparent;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.btn--primary { background: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: color-mix(in srgb, var(--accent) 85%, white); }
+.btn--ghost { color: var(--ink); border-color: var(--border); }
+.btn--ghost:hover { border-color: var(--ink-muted); }
+.btn--small { padding: 0.5rem 0.875rem; font-size: var(--step--1); }

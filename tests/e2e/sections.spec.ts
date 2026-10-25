@@ -11,7 +11,6 @@ test('header nav links to every section', async ({ page }) => {
 test('contact offers the resume and never shows the phone number', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#contact a[href$=".pdf"]')).toHaveAttribute('href', '/resume/Aravindh_Jawahar_Resume.pdf');
-  await expect(page.locator('#contact img')).toHaveAttribute('alt', 'Aravindh Jawahar');
   await expect(page.locator('#stack')).toContainText('pgvector');
   expect(await page.content()).not.toContain('8870637220');
 });

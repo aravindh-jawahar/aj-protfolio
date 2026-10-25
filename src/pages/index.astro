@@ -1,11 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
 import TraceWaterfall from '../components/TraceWaterfall.vue';
 import CareerList from '../components/CareerList.astro';
 import Stack from '../components/Stack.astro';
 import Contact from '../components/Contact.astro';
 import { career } from '../data/career';
-import { site } from '../data/site';
+import { impact, strip } from '../data/site';
 import { toYearMonth } from '../lib/timeline';
 import '../styles/trace.css';
 
@@ -13,26 +15,76 @@ const now = toYearMonth(new Date());
 ---
 
 <Base>
-  <main class="container">
-    <section id="work" class="hero">
-      <h1>{site.name}</h1>
-      <p class="hero__lead">{site.title.charAt(0).toUpperCase() + site.title.slice(1)}. {site.oneLiner}</p>
-      <h2 class="visually-hidden">Career</h2>
-      <TraceWaterfall spans={career} now={now} client:visible />
-      <CareerList spans={career} now={now} />
+  <main>
+    <Hero />
+
+    <div class="strip" aria-label="Main technologies">
+      <ul class="container">
+        {strip.map((name) => <li>{name}</li>)}
+      </ul>
+    </div>
+
+    <section id="impact" class="section container impact" aria-labelledby="impact-title">
+      <h2 id="impact-title" class="section__title">Results from production</h2>
+      <dl>
+        {
+          impact.map((item) => (
+            <div>
+              <dt class="accent">{item.value}</dt>
+              <dd>{item.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
     </section>
+
+    <Services />
+
+    <section id="work" class="section container" aria-labelledby="work-title">
+      <h2 id="work-title" class="section__title">Career, as a trace</h2>
+      <p class="section__lead">Each bar is a real span of time. Select one to open its details.</p>
+      <div class="card work-card">
+        <TraceWaterfall spans={career} now={now} client:visible />
+        <CareerList spans={career} now={now} />
+      </div>
+    </section>
+
     <Stack />
     <Contact />
   </main>
+
+  <footer class="container footer">
+    <p>© {new Date().getFullYear()} Aravindh Jawahar</p>
+  </footer>
 </Base>
 
 <style>
-  .hero { padding-block: var(--space-5) var(--space-6); }
-  main :global(.section) { padding-block: var(--space-5); border-top: 1px solid var(--grid); }
-  main :global(h2) { font-size: var(--step-3); margin-bottom: var(--space-3); }
-  h1 { font-size: var(--step-4); letter-spacing: -0.02em; }
-  .hero__lead { font-size: var(--step-1); margin: var(--space-2) 0 var(--space-5); color: var(--ink-muted); }
+  main { overflow-x: clip; }
+  .strip { border-block: 1px solid var(--border); background: var(--surface); }
+  .strip ul {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-4);
+    list-style: none; padding-block: var(--space-3);
+    font-weight: 700; font-size: var(--step-1); color: var(--ink-muted);
+  }
+
+  .impact { display: grid; grid-template-columns: 1fr 2.2fr; gap: var(--space-4); align-items: center; }
+  .impact .section__title { margin: 0; }
+  .impact dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+  .impact dt { font-size: clamp(2.441rem, 5vw, 3.815rem); font-weight: 800; line-height: 1; }
+  .impact dd { margin: var(--space-1) 0 0; color: var(--ink-muted); font-size: var(--step--1); }
+
+  .work-card { margin-top: var(--space-4); padding: var(--space-4); }
+
+  .footer { padding-block: var(--space-5) var(--space-4); color: var(--ink-muted); font-size: var(--step--1); }
+
+  @media (max-width: 799px) {
+    .impact { grid-template-columns: 1fr; }
+    .work-card { padding: var(--space-3) var(--space-2); }
+  }
   @media (max-width: 719px) {
-    h1 { font-size: var(--step-3); }
+    .strip ul { justify-content: flex-start; font-size: var(--step-0); }
+  }
+  @media (max-width: 479px) {
+    .impact dl { grid-template-columns: 1fr; }
   }
 </style>
