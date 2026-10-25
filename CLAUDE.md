@@ -86,9 +86,12 @@ bento cards). The earlier "quiet, light, no cards" rules are replaced by these.
 - Images: Astro `<Image>` with AVIF/WebP output. Photos live in `src/assets/images/`.
 - SEO: `<title>`, meta description, Open Graph image (generated static PNG), JSON-LD
   `Person` schema, `sitemap.xml`, `robots.txt`.
-- Hosting: GitHub Pages via GitHub Actions, repo `aravindh-jawahar/aj-protfolio`, custom domain
-  `aravindhjawahar.dev` (`site` in astro.config = `https://aravindhjawahar.dev`, no `base`,
-  `public/CNAME` contains `aravindhjawahar.dev`). See PLAN.md.
+- Hosting: GitHub Pages via GitHub Actions, repo `aravindh-jawahar/aj-protfolio`. Until
+  `aravindhjawahar.dev` is registered the site is served at
+  `https://aravindh-jawahar.github.io/aj-protfolio/` (`base: '/aj-protfolio'` in astro.config).
+  Every root-relative link goes through `url()` in `src/lib/url.ts`. When the domain is live: set
+  `site` to `https://aravindhjawahar.dev`, remove `base`, add `public/CNAME`, update robots.txt and
+  the Playwright baseURL.
 
 ### Folder structure
 ```
@@ -100,7 +103,7 @@ src/
   styles/      tokens.css, global.css
   lib/         dates.ts (formatRange)
   assets/images/  portrait.jpg (900×900 navy headshot), candid.jpg (1200×1500 beach photo)
-public/        CNAME, resume/Aravindh_Jawahar_Resume.pdf, favicon.svg, og.png
+public/        resume/Aravindh_Jawahar_Resume.pdf, favicon.svg, og.png
 ```
 
 ### Photos

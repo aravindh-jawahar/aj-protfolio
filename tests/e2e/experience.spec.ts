@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('experience lists every role newest first with company, role and dates', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   const rows = page.locator('#experience details');
   await expect(rows).toHaveCount(3);
   await expect(rows.nth(0)).toContainText('Francium Tech · MoneySmart');
@@ -12,7 +12,7 @@ test('experience lists every role newest first with company, role and dates', as
 });
 
 test('details open in place with grouped outcomes and no partner names', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   const moneysmart = page.locator('#experience details').first();
   await expect(moneysmart.getByText('Retrieval pipeline')).toBeHidden();
   await moneysmart.locator('summary').click();
@@ -23,7 +23,7 @@ test('details open in place with grouped outcomes and no partner names', async (
 });
 
 test('details toggle from the keyboard', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   const meggitt = page.locator('#experience details').nth(1);
   await meggitt.locator('summary').focus();
   await page.keyboard.press('Enter');
@@ -34,7 +34,7 @@ test('details toggle from the keyboard', async ({ page }) => {
 test.describe('without JavaScript', () => {
   test.use({ javaScriptEnabled: false });
   test('details still open', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('./');
     const cads = page.locator('#experience details').nth(2);
     await cads.locator('summary').click();
     await expect(cads).toContainText('70%');
@@ -42,7 +42,7 @@ test.describe('without JavaScript', () => {
 });
 
 test('education is its own section with both degrees', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   const education = page.locator('#education');
   await expect(education.getByRole('heading', { level: 2 })).toHaveText('Education');
   await expect(education.locator('article')).toHaveCount(2);
@@ -54,7 +54,7 @@ test('education is its own section with both degrees', async ({ page }) => {
 
 test('phone has no horizontal scroll', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('./');
   await page.locator('#experience details').first().locator('summary').click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });

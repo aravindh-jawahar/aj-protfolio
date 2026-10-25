@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import { site } from '../data/site';
 ---
 
@@ -10,7 +11,7 @@ import { site } from '../data/site';
     </div>
     <div class="contact__actions">
       <a class="btn btn--primary" href={`mailto:${site.email}`}>{site.email} <span aria-hidden="true">→</span></a>
-      <a class="btn btn--ghost" href={site.resumePath} download>Download resume (PDF)</a>
+      <a class="btn btn--ghost" href={url(site.resumePath)} download>Download resume (PDF)</a>
       <a class="btn btn--ghost" href={site.linkedin}>LinkedIn</a>
       <a class="btn btn--ghost" href={site.github}>GitHub</a>
     </div>

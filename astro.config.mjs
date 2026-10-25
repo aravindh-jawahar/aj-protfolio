@@ -2,7 +2,9 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://aravindhjawahar.dev',
+  // Served from github.io until aravindhjawahar.dev is registered; then set site to the domain and drop base.
+  site: 'https://aravindh-jawahar.github.io',
+  base: '/aj-protfolio',
   output: 'static',
   integrations: [sitemap()],
 });

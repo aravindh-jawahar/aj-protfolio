@@ -1,7 +1,8 @@
 # Aravindh Jawahar — portfolio
 
 Personal portfolio for Aravindh Jawahar, AI product engineer in Chennai. Live at
-**[aravindhjawahar.dev](https://aravindhjawahar.dev)**.
+**[aravindh-jawahar.github.io/aj-protfolio](https://aravindh-jawahar.github.io/aj-protfolio/)**
+(moving to `aravindhjawahar.dev` once the domain is registered).
 
 A single static page: a hero with resume stats, an AI engineering section that walks through a
 production RAG pipeline, work experience, education, stack and contact. It ships zero client-side
@@ -21,7 +22,7 @@ Requires Node 18.20+, 20.3+ or 22+.
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321
+npm run dev        # http://localhost:4321/aj-protfolio/
 ```
 
 | Command           | What it does                                              |
@@ -63,7 +64,7 @@ src/
   pages/        index.astro, 404.astro
   styles/       tokens.css (design tokens), global.css
 tests/e2e/      Playwright specs
-public/         CNAME, favicon, og.png, robots.txt, resume PDF
+public/         favicon, og.png, robots.txt, resume PDF
 ```
 
 `CLAUDE.md` is the full design and content brief; `PLAN.md` covers the build phases and deploy steps.
@@ -71,5 +72,6 @@ public/         CNAME, favicon, og.png, robots.txt, resume PDF
 ## Deployment
 
 Every push to `main` runs `.github/workflows/deploy.yml`, which builds with `withastro/action`
-and publishes with `actions/deploy-pages`. The custom domain is set in `public/CNAME` and in the
-repository's Pages settings.
+and publishes with `actions/deploy-pages`. The site builds with `base: '/aj-protfolio'`; use
+`url()` from `src/lib/url.ts` for any root-relative link. To move to the custom domain, follow the
+hosting note in `CLAUDE.md`.

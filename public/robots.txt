@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aravindhjawahar.dev/sitemap-index.xml
+Sitemap: https://aravindh-jawahar.github.io/aj-protfolio/sitemap-index.xml

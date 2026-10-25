@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import candid from '../assets/images/candid.jpg';
@@ -9,7 +10,7 @@ import candid from '../assets/images/candid.jpg';
     <div>
       <h1>This span doesn't exist</h1>
       <p>The page you asked for isn't here. The rest of the trace is.</p>
-      <p><a href="/">Back to home</a></p>
+      <p><a href={url('/')}>Back to home</a></p>
     </div>
     <Picture src={candid} alt="Aravindh on a beach" width={480} formats={['avif', 'webp']} />
   </main>
