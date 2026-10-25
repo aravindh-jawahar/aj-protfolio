@@ -1,7 +1,7 @@
 {
   "name": "aj-portfolio",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run src",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
